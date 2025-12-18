@@ -1,0 +1,272 @@
+---
+title: "Flight Schedules"
+api: "GET https://api.flystack.dev/v1/schedules"
+description: "Retrieve near real-time departure and arrival schedules, including gates, terminals, and updated times."
+---
+
+Build timetables and “what’s next” experiences using live flight schedules. Schedules are ideal for airport-style boards, lounge/terminal displays, travel assistants, bots, widgets, and any product that needs the latest departure/arrival queue.
+
+<Note>
+  Schedules typically return results up to ~10 hours ahead (coverage may vary).
+</Note>
+
+### Authentication
+
+<ParamField header="x-api-key" type="string" required={true}>
+  Your FlyStack API token. You can create one from the dashboard (see [Authentication](/authentication)).
+</ParamField>
+
+### Query parameters
+
+You can query schedules by airport, airline, or specific flight codes.
+
+#### Airport filters
+
+<ParamField query="dep_iata" type="string" required={false}>
+  Departure airport IATA code (e.g., `MIA`).
+</ParamField>
+
+<ParamField query="dep_icao" type="string" required={false}>
+  Departure airport ICAO code (e.g., `KMIA`).
+</ParamField>
+
+<ParamField query="arr_iata" type="string" required={false}>
+  Arrival airport IATA code (e.g., `SFO`).
+</ParamField>
+
+<ParamField query="arr_icao" type="string" required={false}>
+  Arrival airport ICAO code (e.g., `KSFO`).
+</ParamField>
+
+#### Airline filters
+
+<ParamField query="airline_iata" type="string" required={false}>
+  Query by one airline IATA code, or provide multiple IATA codes when querying by airport (comma-separated).
+</ParamField>
+
+<ParamField query="airline_icao" type="string" required={false}>
+  Query by one airline ICAO code, or provide multiple ICAO codes when querying by airport (comma-separated).
+</ParamField>
+
+#### Flight filters
+
+<ParamField query="flight_icao" type="string" required={false}>
+  Query by flight ICAO code-number (e.g., `BAW6984`).
+</ParamField>
+
+<ParamField query="flight_iata" type="string" required={false}>
+  Query by flight IATA code-number (e.g., `BA6984`).
+</ParamField>
+
+#### Response shaping & pagination
+
+<ParamField query="_fields" type="string" required={false}>
+  Comma-separated list of fields to return (e.g., `airline_iata,flight_number`).
+</ParamField>
+
+<ParamField query="limit" type="number" required={false}>
+  Maximum number of results (limits may depend on your plan and query type).
+</ParamField>
+
+<ParamField query="offset" type="number" required={false}>
+  Pagination offset (0+). Use with `limit` when a response indicates there are more results.
+</ParamField>
+
+### Response
+
+The endpoint returns a list of schedule entries.
+
+#### Flight schedule response fields
+
+<ResponseField type="array">
+  <ResponseField type="object">
+    <Expandable title="Airline & flight identifiers" defaultOpen={false}>
+      <ResponseField name="airline_iata" type="string">
+        Airline IATA code.
+      </ResponseField>
+      <ResponseField name="airline_icao" type="string">
+        Airline ICAO code.
+      </ResponseField>
+      <ResponseField name="flight_iata" type="string">
+        Flight IATA code-number.
+      </ResponseField>
+      <ResponseField name="flight_icao" type="string">
+        Flight ICAO code-number.
+      </ResponseField>
+      <ResponseField name="flight_number" type="string">
+        Flight number only.
+      </ResponseField>
+      <ResponseField name="cs_airline_iata" type="string">
+        Codeshare airline IATA code (when available).
+      </ResponseField>
+      <ResponseField name="cs_flight_number" type="string">
+        Codeshare flight number (when available).
+      </ResponseField>
+      <ResponseField name="cs_flight_iata" type="string">
+        Codeshare flight IATA code-number (when available).
+      </ResponseField>
+    </Expandable>
+
+    <Expandable title="Departure" defaultOpen={false}>
+      <ResponseField name="dep_iata" type="string">
+        Departure airport IATA code.
+      </ResponseField>
+      <ResponseField name="dep_icao" type="string">
+        Departure airport ICAO code.
+      </ResponseField>
+      <ResponseField name="dep_terminal" type="string">
+        Estimated departure terminal (when available).
+      </ResponseField>
+      <ResponseField name="dep_gate" type="string">
+        Estimated departure gate (when available).
+      </ResponseField>
+    </Expandable>
+
+    <Expandable title="Arrival" defaultOpen={false}>
+      <ResponseField name="arr_iata" type="string">
+        Arrival airport IATA code.
+      </ResponseField>
+      <ResponseField name="arr_icao" type="string">
+        Arrival airport ICAO code.
+      </ResponseField>
+      <ResponseField name="arr_terminal" type="string">
+        Estimated arrival terminal (when available).
+      </ResponseField>
+      <ResponseField name="arr_gate" type="string">
+        Estimated arrival gate (when available).
+      </ResponseField>
+      <ResponseField name="arr_baggage" type="string">
+        Estimated baggage belt (when available).
+      </ResponseField>
+    </Expandable>
+
+    <Expandable title="Times (scheduled / estimated / actual)" defaultOpen={false}>
+      <ResponseField name="dep_time" type="string">
+        Scheduled departure time (local).
+      </ResponseField>
+      <ResponseField name="dep_time_ts" type="number">
+        Scheduled departure time (unix).
+      </ResponseField>
+      <ResponseField name="dep_time_utc" type="string">
+        Scheduled departure time (UTC).
+      </ResponseField>
+      <ResponseField name="dep_estimated" type="string">
+        Estimated departure time (local, when available).
+      </ResponseField>
+      <ResponseField name="dep_estimated_ts" type="number">
+        Estimated departure time (unix, when available).
+      </ResponseField>
+      <ResponseField name="dep_estimated_utc" type="string">
+        Estimated departure time (UTC, when available).
+      </ResponseField>
+      <ResponseField name="dep_actual" type="string">
+        Actual departure time (local, when available).
+      </ResponseField>
+      <ResponseField name="dep_actual_ts" type="number">
+        Actual departure time (unix, when available).
+      </ResponseField>
+      <ResponseField name="dep_actual_utc" type="string">
+        Actual departure time (UTC, when available).
+      </ResponseField>
+
+      <ResponseField name="arr_time" type="string">
+        Scheduled arrival time (local).
+      </ResponseField>
+      <ResponseField name="arr_time_ts" type="number">
+        Scheduled arrival time (unix).
+      </ResponseField>
+      <ResponseField name="arr_time_utc" type="string">
+        Scheduled arrival time (UTC).
+      </ResponseField>
+      <ResponseField name="arr_estimated" type="string">
+        Estimated arrival time (local, when available).
+      </ResponseField>
+      <ResponseField name="arr_estimated_ts" type="number">
+        Estimated arrival time (unix, when available).
+      </ResponseField>
+      <ResponseField name="arr_estimated_utc" type="string">
+        Estimated arrival time (UTC, when available).
+      </ResponseField>
+      <ResponseField name="arr_actual" type="string">
+        Actual arrival time (local, when available).
+      </ResponseField>
+      <ResponseField name="arr_actual_ts" type="number">
+        Actual arrival time (unix, when available).
+      </ResponseField>
+      <ResponseField name="arr_actual_utc" type="string">
+        Actual arrival time (UTC, when available).
+      </ResponseField>
+    </Expandable>
+
+    <Expandable title="Status & derived fields" defaultOpen={false}>
+      <ResponseField name="duration" type="number">
+        Estimated flight duration (minutes).
+      </ResponseField>
+      <ResponseField name="dep_delayed" type="number">
+        Estimated departure delay (minutes, when available).
+      </ResponseField>
+      <ResponseField name="arr_delayed" type="number">
+        Estimated arrival delay (minutes, when available).
+      </ResponseField>
+      <ResponseField name="status" type="string">
+        `scheduled`, `cancelled`, `active`, `landed`.
+      </ResponseField>
+    </Expandable>
+  </ResponseField>
+</ResponseField>
+
+<ResponseExample>
+```json Response
+[
+  {
+    "airline_iata": "BA",
+    "airline_icao": "BAW",
+    "flight_iata": "BA6984",
+    "flight_icao": "BAW6984",
+    "flight_number": "6984",
+    "cs_airline_iata": "AA",
+    "cs_flight_number": "2421",
+    "cs_flight_iata": "AA2421",
+    "dep_iata": "MIA",
+    "dep_icao": "KMIA",
+    "dep_terminal": "C",
+    "dep_gate": "E4",
+    "dep_time": "2021-07-14 19:53",
+    "dep_time_ts": 1626306780,
+    "dep_time_utc": "2021-07-14 23:53",
+    "dep_estimated": "2021-07-14 22:10",
+    "dep_estimated_ts": 1626315000,
+    "dep_estimated_utc": "2021-07-15 02:10",
+    "dep_actual": "2021-07-14 22:10",
+    "dep_actual_ts": 1626315000,
+    "dep_actual_utc": "2021-07-15 02:10",
+    "arr_iata": "SFO",
+    "arr_icao": "KSFO",
+    "arr_terminal": "1",
+    "arr_gate": "B24",
+    "arr_baggage": "1",
+    "arr_time": "2021-07-14 22:52",
+    "arr_time_ts": 1626328320,
+    "arr_time_utc": "2021-07-15 05:52",
+    "arr_estimated": "2021-07-15 01:09",
+    "arr_estimated_ts": 1626336540,
+    "arr_estimated_utc": "2021-07-15 08:09",
+    "arr_actual": "2021-07-15 01:09",
+    "arr_actual_ts": 1626336540,
+    "arr_actual_utc": "2021-07-15 08:09",
+    "status": "scheduled",
+    "duration": 359,
+    "dep_delayed": 137,
+    "arr_delayed": 137
+  }
+]
+```
+</ResponseExample>
+
+### See also
+
+- [Real-Time Flights API](/api-reference/endpoints/flights)
+- [Airlines Dataset API](/api-reference/endpoints/airlines)
+- [Airports Dataset API](/api-reference/endpoints/airports)
+
+

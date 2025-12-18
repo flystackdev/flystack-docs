@@ -1,0 +1,126 @@
+---
+title: "Jobs"
+api: "GET https://api.flystack.dev/v1/jobs/:id"
+description: "Retrieve the status and result of an asynchronous FlyStack job."
+---
+
+<Note>
+  This endpoint is not billed and can be called unlimited times without any cost implications.
+</Note>
+
+### Authentication
+
+<ParamField header="x-api-key" type="string" required={true}>
+  Your FlyStack API token. You can create one from the dashboard (see [Authentication](/authentication)).
+</ParamField>
+
+### Response
+
+<ResponseField type="object">
+    <ResponseField name="id" type="string">
+        Unique identifier for the job.
+    </ResponseField>
+    <ResponseField name="status" type="string">
+        Current status of the job:
+        - `QueuedJob`: Job is queued or processing
+        - `CompletedJob`: Job finished successfully
+        - `FailedJob`: Job finished with an error
+    </ResponseField>
+    <ResponseField name="success" type="boolean">
+        Indicates if the job completed successfully. Only present when status is `CompletedJob`.
+    </ResponseField>
+    <ResponseField name="endpoint" type="string">
+        The API endpoint that initiated this job (e.g., `/v1/flights`).
+    </ResponseField>
+    <ResponseField name="created_at" type="string">
+        ISO 8601 timestamp when the job was created.
+    </ResponseField>
+    <ResponseField name="started_at" type="string">
+        ISO 8601 timestamp when the job started processing (if started).
+    </ResponseField>
+    <ResponseField name="duration_ms" type="number">
+        Time taken to complete the job in milliseconds. Only present when status is `CompletedJob`.
+    </ResponseField>
+    <ResponseField name="args" type="object">
+        Input parameters used when creating the job (varies by endpoint).
+    </ResponseField>
+    <ResponseField name="result" type="object">
+        Output data from the completed job. Only present when status is `CompletedJob`.
+        The shape of this object matches the response you would receive when calling the original endpoint synchronously.
+    </ResponseField>
+    <ResponseField name="error" type="object">
+        Error details. Only present when status is `FailedJob`.
+    </ResponseField>
+</ResponseField>
+
+<RequestExample>
+
+```bash Example Request
+curl --location --request GET 'https://api.flystack.dev/v1/jobs/0193443f-fb80-9d19-29ba-82bc77c7cd8c' \
+--header 'Content-Type: application/json' \
+--header 'x-api-key: <token>'
+```
+
+</RequestExample>
+
+<ResponseExample>
+```json Job In Progress
+{
+    "id": "0193443f-fb80-9d19-29ba-82bc77c7cd8c",
+    "status": "QueuedJob",
+    "endpoint": "/v1/flights",
+    "created_at": "2024-11-19T11:47:44.127229Z",
+    "started_at": "2024-11-19T11:47:44.134374Z",
+    "args": {
+        "flight_iata": "AF011",
+        "date": "2024-11-19"
+    }
+}
+```
+
+```json Job Completed
+{
+    "id": "0193305e-e144-a995-3acc-6703bb48e13a",
+    "success": true,
+    "status": "CompletedJob",
+    "endpoint": "/v1/flights",
+    "created_at": "2024-11-15T15:09:04.709497Z",
+    "started_at": "2024-11-15T15:09:04.714422Z",
+    "duration_ms": 1842,
+    "args": {
+        "flight_iata": "AF011",
+        "date": "2024-11-15"
+    },
+    "result": {
+        "data": [
+            {
+                "flight_iata": "AF011",
+                "status": "scheduled",
+                "dep_iata": "CDG",
+                "arr_iata": "JFK",
+                "dep_time_utc": "2024-11-15 09:20",
+                "arr_time_utc": "2024-11-15 17:10"
+            }
+        ]
+    }
+}
+```
+
+```json Job Failed
+{
+    "id": "01935a6b-9e3a-7d0f-8af5-71c6bd2e3f24",
+    "status": "FailedJob",
+    "endpoint": "/v1/flights",
+    "created_at": "2024-11-19T11:47:44.127229Z",
+    "started_at": "2024-11-19T11:47:44.134374Z",
+    "args": {
+        "flight_iata": "AF011",
+        "date": "2024-11-19"
+    },
+    "error": {
+        "message": "Invalid date format. Expected YYYY-MM-DD.",
+        "code": "VALIDATION_ERROR"
+    }
+}
+```
+</ResponseExample>

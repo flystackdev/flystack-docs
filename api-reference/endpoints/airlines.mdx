@@ -1,0 +1,183 @@
+---
+title: "Airlines Dataset"
+api: "GET https://api.flystack.dev/v1/airlines"
+description: "Search and filter airlines worldwide using IATA/ICAO codes, callsigns, and operational flags."
+---
+
+Airlines data is essential for almost any travel product—whether you build B2B tools or B2C experiences. A complete, reliable airlines dataset helps your app meet user expectations and lets your team focus on what matters most.
+
+Use the Airlines Dataset endpoint to retrieve airlines worldwide and filter them by common aviation identifiers, names, and country.
+
+### Authentication
+
+<ParamField header="x-api-key" type="string" required={true}>
+  Your FlyStack API token. You can create one from the dashboard (see [Authentication](/authentication)).
+</ParamField>
+
+### Query parameters
+
+#### Airline identifiers
+
+<ParamField query="iata_code" type="string" required={false}>
+  Filter by airline IATA code (e.g., `AA`).
+</ParamField>
+
+<ParamField query="icao_code" type="string" required={false}>
+  Filter by airline ICAO code (e.g., `AAL`).
+</ParamField>
+
+<ParamField query="callsign" type="string" required={false}>
+  Filter by ICAO callsign (e.g., `AMERICAN`).
+</ParamField>
+
+#### Additional filters
+
+<ParamField query="iata_prefix" type="number" required={false}>
+  Filter by IATA 3-digit airline prefix number.
+</ParamField>
+
+<ParamField query="iata_accounting" type="number" required={false}>
+  Filter by IATA accounting number.
+</ParamField>
+
+<ParamField query="name" type="string" required={false}>
+  Filter by airline name (e.g., `American Airlines`).
+</ParamField>
+
+<ParamField query="country_code" type="string" required={false}>
+  Filter by country ISO-2 code (e.g., `US`).
+</ParamField>
+
+#### Response shaping
+
+<ParamField query="_fields" type="string" required={false}>
+  Comma-separated list of fields to return (e.g., `name,iata_code,icao_code,callsign,country_code`).
+</ParamField>
+
+<Note>
+  The response can be shortened for readability when using `_fields`. Data coverage may vary by airline.
+</Note>
+
+### Response
+
+The endpoint returns a list of airlines.
+
+#### Airlines dataset response fields
+
+<ResponseField type="array">
+  <ResponseField type="object">
+    <ResponseField name="name" type="string">
+      Public airline name.
+    </ResponseField>
+    <ResponseField name="iata_prefix" type="number">
+      IATA 3-digit airline prefix number (cargo operations, when available).
+    </ResponseField>
+    <ResponseField name="iata_accounting" type="number">
+      IATA 3-digit accounting number (passenger operations, when available).
+    </ResponseField>
+    <ResponseField name="iata_code" type="string">
+      Official IATA code.
+    </ResponseField>
+    <ResponseField name="icao_code" type="string">
+      Official ICAO code.
+    </ResponseField>
+    <ResponseField name="callsign" type="string">
+      Allocated ICAO callsign (when available).
+    </ResponseField>
+    <ResponseField name="country_code" type="string">
+      ISO-2 country code.
+    </ResponseField>
+
+    <Expandable title="Operational flags" defaultOpen={false}>
+      <ResponseField name="iosa_registered" type="number">
+        IATA Operational Safety Audit Program flag (0/1, when available).
+      </ResponseField>
+      <ResponseField name="is_scheduled" type="number">
+        Scheduled airline flag (0/1, when available).
+      </ResponseField>
+      <ResponseField name="is_passenger" type="number">
+        Passenger services flag (0/1, when available).
+      </ResponseField>
+      <ResponseField name="is_cargo" type="number">
+        Cargo services flag (0/1, when available).
+      </ResponseField>
+      <ResponseField name="is_international" type="number">
+        International operations flag (0/1, when available).
+      </ResponseField>
+    </Expandable>
+
+    <Expandable title="Enrichment" defaultOpen={false}>
+      <ResponseField name="total_aircrafts" type="number">
+        Confirmed total aircraft count (when available).
+      </ResponseField>
+      <ResponseField name="average_fleet_age" type="number">
+        Average fleet age (years, when available).
+      </ResponseField>
+      <ResponseField name="accidents_last_5y" type="number">
+        Accidents in the last 5 years (when available).
+      </ResponseField>
+      <ResponseField name="crashes_last_5y" type="number">
+        Crashes in the last 5 years (when available).
+      </ResponseField>
+    </Expandable>
+
+    <Expandable title="Links" defaultOpen={false}>
+      <ResponseField name="website" type="string">
+        Official website (when available).
+      </ResponseField>
+      <ResponseField name="facebook" type="string">
+        Official Facebook profile (when available).
+      </ResponseField>
+      <ResponseField name="twitter" type="string">
+        Official Twitter/X profile (when available).
+      </ResponseField>
+      <ResponseField name="instagram" type="string">
+        Official Instagram profile (when available).
+      </ResponseField>
+      <ResponseField name="linkedin" type="string">
+        Official LinkedIn profile (when available).
+      </ResponseField>
+    </Expandable>
+
+    <ResponseField name="slug" type="string">
+      Unique airline identifier.
+    </ResponseField>
+  </ResponseField>
+</ResponseField>
+
+<ResponseExample>
+```json Response
+[
+  {
+    "name": "American Airlines",
+    "iata_code": "AA",
+    "iata_prefix": 1,
+    "iata_accounting": 1,
+    "icao_code": "AAL",
+    "callsign": "AMERICAN",
+    "country_code": "US",
+    "iosa_registered": 1,
+    "is_scheduled": 1,
+    "is_passenger": 1,
+    "is_cargo": 1,
+    "is_international": 1,
+    "total_aircrafts": 684,
+    "average_fleet_age": 10,
+    "accidents_last_5y": 26,
+    "crashes_last_5y": 0,
+    "website": "www.aa.com",
+    "facebook": "facebook.com/aa",
+    "twitter": "twitter.com/americanair",
+    "instagram": "instagram.com/americanair",
+    "linkedin": "linkedin.com/company/american-airlines",
+    "slug": "american-aa-aal-us"
+  }
+]
+```
+</ResponseExample>
+
+### Airline logos
+
+FlyStack currently does not document a dedicated logos endpoint in this reference. If you rely on airline logos in your UI, you can typically derive a logo URL from the airline IATA code using your existing assets/CDN strategy.
+
+

@@ -1,0 +1,91 @@
+---
+title: "Countries Dataset"
+api: "GET https://api.flystack.dev/v1/countries"
+description: "Look up countries and localization data like ISO codes, continent, population, and currency."
+---
+
+Use the Countries Dataset when you need localization in your product—country names, standard ISO codes, continent mapping, and currency codes. It’s especially helpful for travel apps that need to automatically display local currency or present country-aware UI.
+
+### Authentication
+
+<ParamField header="x-api-key" type="string" required={true}>
+  Your FlyStack API token. You can create one from the dashboard (see [Authentication](/authentication)).
+</ParamField>
+
+### Query parameters
+
+<ParamField query="code" type="string" required={false}>
+  Filter by country ISO-2 code (e.g., `US`).
+</ParamField>
+
+<ParamField query="code3" type="string" required={false}>
+  Filter by country ISO-3 code (e.g., `USA`).
+</ParamField>
+
+<ParamField query="continent" type="string" required={false}>
+  Filter by continent code: `AF`, `AN`, `AS`, `EU`, `NA`, `OC`, `SA`.
+</ParamField>
+
+<ParamField query="_fields" type="string" required={false}>
+  Comma-separated list of fields to return (e.g., `name,code,code3,currency`).
+</ParamField>
+
+### Response
+
+The endpoint returns a list of countries.
+
+#### Countries dataset response fields
+
+<ResponseField type="array">
+  <ResponseField type="object">
+    <ResponseField name="name" type="string">
+      Country name.
+    </ResponseField>
+    <ResponseField name="code" type="string">
+      ISO-2 country code.
+    </ResponseField>
+    <ResponseField name="code3" type="string">
+      ISO-3 country code.
+    </ResponseField>
+    <ResponseField name="population" type="number">
+      Total country population (when available).
+    </ResponseField>
+    <ResponseField name="continent" type="string">
+      Continent code (`AF`, `AN`, `AS`, `EU`, `NA`, `OC`, `SA`).
+    </ResponseField>
+    <ResponseField name="currency" type="string">
+      Main currency code (when available).
+    </ResponseField>
+    <ResponseField name="names" type="object">
+      Alternative names in different languages (when available).
+    </ResponseField>
+  </ResponseField>
+</ResponseField>
+
+<ResponseExample>
+```json Response
+[
+  {
+    "code": "US",
+    "code3": "USA",
+    "name": "United States",
+    "population": 327167434,
+    "continent": "NA",
+    "currency": "USD",
+    "names": {
+      "en": "United States",
+      "fr": "États-Unis",
+      "es": "Estados Unidos"
+    }
+  }
+]
+```
+</ResponseExample>
+
+### See also
+
+- [Airports Dataset API](/api-reference/endpoints/airports)
+- [Real-Time Flights API](/api-reference/endpoints/flights)
+- Flight Schedules API (see [Schedules](/api-reference/endpoints/schedules))
+
+

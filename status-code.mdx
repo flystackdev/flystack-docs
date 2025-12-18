@@ -1,0 +1,28 @@
+---
+title: Status Code
+description: "The following list of HTTP codes are returned by FlyStack."
+icon: "code"
+---
+
+The following list of HTTP status codes is returned by FlyStack. Each status code indicates the outcome of an API call and suggests a potential resolution for errors.
+
+| Status Code | Is Billed? | Explanation                        | Resolution                                                                                                                |
+| ----------- | ---------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| 200 and 201 | Yes        | **Successful API Call**            | No action required.                                                                                                       |
+| 400         | No         | **Bad Request / Inactive API Key** | Verify your parameters and their types. Ensure your API key is active and not expired. Check the detailed error message in the response body for more information. |
+| 401         | No         | **Expired API Key**                | Expired API key. Please update your API key or generate a new one.                                                                              |
+| 402         | No         | **Payment Required / You Have Open Invoices**           | Settle any outstanding invoices to continue using the API.                                                                |
+| 403         | No         | **Forbidden / Account Deactivated** | Verify your permissions. Contact us if you believe this is a mistake.                                                     |
+| 404         | No         | **Not Found / URL Not Found**      | Ensure the endpoint URL is correct.             |
+| 429         | No         | **Rate Limit Exceeded**            | Consider upgrading your current plan or get in touch with our sales team.                                                 |
+| 500         | No         | **Unexpected Error**               | Retry the action and check the detailed error message in the response body for more insights.                             |
+
+
+### Additional Notes
+
+- **400 Bad Request**: This status indicates that the server cannot process the request due to a client error (e.g., malformed request syntax or invalid parameters).
+- **401 Unauthorized**: Typically returned when an invalid API key is used. Make sure your API key is active and not expired.
+- **402 Payment Required**: Occurs if there are outstanding invoices. Settle any open invoices to continue using the API.
+- **403 Forbidden**: Indicates that the user does not have permission to access the requested resource.
+- **429 Too Many Requests**: This status indicates that the client has sent too many requests in a given amount of time (rate limiting).
+- **500 Internal Server Error**: This is a generic error message for unexpected server issues. Check logs for more detailed information.

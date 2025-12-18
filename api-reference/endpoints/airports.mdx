@@ -1,0 +1,169 @@
+---
+title: "Airports Dataset"
+api: "GET https://api.flystack.dev/v1/airports"
+description: "Search and filter airports worldwide using IATA/ICAO codes and rich metadata."
+---
+
+Airport data is fundamental to any travel-related product. A complete airports dataset helps you meet user expectations and ship better experiences—destination maps, airport pickers, logistics models, internal tools, analytics, and more.
+
+Use the Airports Dataset endpoint to retrieve airports worldwide and filter them by common aviation identifiers.
+
+### Authentication
+
+<ParamField header="x-api-key" type="string" required={true}>
+  Your FlyStack API token. You can create one from the dashboard (see [Authentication](/authentication)).
+</ParamField>
+
+### Query parameters
+
+#### Airport identifiers
+
+<ParamField query="iata_code" type="string" required={false}>
+  Filter by airport IATA code (e.g., `CDG`).
+</ParamField>
+
+<ParamField query="icao_code" type="string" required={false}>
+  Filter by airport ICAO code (e.g., `LFPG`).
+</ParamField>
+
+<ParamField query="city_code" type="string" required={false}>
+  Filter by IATA city code (e.g., `PAR`).
+</ParamField>
+
+<ParamField query="country_code" type="string" required={false}>
+  Filter by country ISO-2 code (e.g., `FR`).
+</ParamField>
+
+#### Response shaping
+
+<ParamField query="_fields" type="string" required={false}>
+  Comma-separated list of fields to return (e.g., `name,iata_code,icao_code,lat,lng`).
+</ParamField>
+
+<Note>
+  The response can be shortened for readability when using `_fields`. Data coverage may vary by airport.
+</Note>
+
+### Response
+
+The endpoint returns a list of airports.
+
+#### Airports dataset response fields
+
+<ResponseField type="array">
+  <ResponseField type="object">
+    <ResponseField name="name" type="string">
+      Public airport name.
+    </ResponseField>
+    <ResponseField name="iata_code" type="string">
+      Official IATA code.
+    </ResponseField>
+    <ResponseField name="icao_code" type="string">
+      Official ICAO code.
+    </ResponseField>
+    <ResponseField name="lat" type="number">
+      Latitude.
+    </ResponseField>
+    <ResponseField name="lng" type="number">
+      Longitude.
+    </ResponseField>
+    <ResponseField name="alt" type="number">
+      Airport elevation (feet).
+    </ResponseField>
+    <ResponseField name="city" type="string">
+      Metropolitan city name (when available).
+    </ResponseField>
+    <ResponseField name="city_code" type="string">
+      IATA city code (when available).
+    </ResponseField>
+    <ResponseField name="un_locode" type="string">
+      United Nations location code (when available).
+    </ResponseField>
+    <ResponseField name="timezone" type="string">
+      IANA timezone (when available).
+    </ResponseField>
+    <ResponseField name="country_code" type="string">
+      ISO-2 country code.
+    </ResponseField>
+
+    <Expandable title="Names & metadata" defaultOpen={false}>
+      <ResponseField name="names" type="object">
+        Alternative airport names in different languages (when available).
+      </ResponseField>
+      <ResponseField name="runways" type="number">
+        Total number of runways (when available).
+      </ResponseField>
+      <ResponseField name="departures" type="number">
+        Estimated total departures per year (when available).
+      </ResponseField>
+      <ResponseField name="connections" type="number">
+        Estimated number of direct connections to other airports (when available).
+      </ResponseField>
+      <ResponseField name="is_major" type="boolean">
+        Whether this is a major airport in its metro area (when available).
+      </ResponseField>
+      <ResponseField name="is_international" type="number">
+        International operations flag (0/1, when available).
+      </ResponseField>
+    </Expandable>
+
+    <Expandable title="Links" defaultOpen={false}>
+      <ResponseField name="website" type="string">
+        Official website (when available).
+      </ResponseField>
+      <ResponseField name="facebook" type="string">
+        Official Facebook profile (when available).
+      </ResponseField>
+      <ResponseField name="twitter" type="string">
+        Official Twitter/X profile (when available).
+      </ResponseField>
+      <ResponseField name="instagram" type="string">
+        Official Instagram profile (when available).
+      </ResponseField>
+      <ResponseField name="linkedin" type="string">
+        Official LinkedIn profile (when available).
+      </ResponseField>
+    </Expandable>
+
+    <ResponseField name="slug" type="string">
+      Unique airport identifier.
+    </ResponseField>
+  </ResponseField>
+</ResponseField>
+
+<ResponseExample>
+```json Response
+[
+  {
+    "name": "Paris Charles de Gaulle Airport",
+    "iata_code": "CDG",
+    "icao_code": "LFPG",
+    "lat": 49.009592,
+    "lng": 2.555675,
+    "alt": 392,
+    "city": "Paris",
+    "city_code": "PAR",
+    "un_locode": "FRCDG",
+    "timezone": "Europe/Paris",
+    "country_code": "FR",
+    "phone": "+33170363950",
+    "website": "http://www.aeroportsdeparis.fr/",
+    "facebook": "facebook.com/parisaeroport",
+    "instagram": "instagram.com/parisaeroport/",
+    "linkedin": "linkedin.com/company/groupe-adp",
+    "twitter": "twitter.com/parisaeroport",
+    "names": {
+      "en": "Paris Charles de Gaulle Airport",
+      "fr": "Aéroport Paris–Charles de Gaulle",
+      "es": "Aeropuerto de París - Charles de Gaulle"
+    },
+    "runways": 8,
+    "departures": 186292,
+    "connections": 411,
+    "is_major": false,
+    "is_international": 1,
+    "slug": "charles-gaulle-cdg-lfpg-fr"
+  }
+]
+```
+</ResponseExample>

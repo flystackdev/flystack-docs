@@ -1,0 +1,265 @@
+---
+title: "Flight Lookup"
+api: "GET https://api.flystack.dev/v1/flights/lookup"
+description: "Lookup a single flight and get detailed information by IATA or ICAO flight code."
+---
+
+The Flight Lookup API combines schedule data, near real-time tracking, and aircraft details for a **single** scheduled & live flight. It’s ideal for flight detail screens: status changes, times, gates, terminals, and aircraft information in one response.
+
+<Note>
+  This endpoint returns the closest matching flight (live, scheduled, or landed). If you need all occurrences of a flight number across a day, use the [Flight Schedules API](/api-reference/endpoints/schedules) and query by `flight_iata` or `flight_icao`.
+</Note>
+
+### Authentication
+
+<ParamField header="x-api-key" type="string" required={true}>
+  Your FlyStack API token. You can create one from the dashboard (see [Authentication](/authentication)).
+</ParamField>
+
+### Query parameters
+
+<ParamField query="flight_icao" type="string" required={false}>
+  Search by flight ICAO code-number (e.g., `AAL6`).
+</ParamField>
+
+<ParamField query="flight_iata" type="string" required={false}>
+  Or search by flight IATA code-number (e.g., `AA6`).
+</ParamField>
+
+<Note>
+  Provide either `flight_iata` or `flight_icao`.
+</Note>
+
+### Response
+
+<ResponseField type="object">
+  <Expandable title="Live tracking" defaultOpen={false}>
+    <ResponseField name="hex" type="string">
+      ICAO24 hex address.
+    </ResponseField>
+    <ResponseField name="lat" type="number">
+      Latitude.
+    </ResponseField>
+    <ResponseField name="lng" type="number">
+      Longitude.
+    </ResponseField>
+    <ResponseField name="alt" type="number">
+      Altitude (meters).
+    </ResponseField>
+    <ResponseField name="dir" type="number">
+      Heading (degrees).
+    </ResponseField>
+    <ResponseField name="speed" type="number">
+      Horizontal speed (km/h).
+    </ResponseField>
+    <ResponseField name="v_speed" type="number">
+      Vertical speed.
+    </ResponseField>
+    <ResponseField name="squawk" type="string">
+      Squawk code (when available).
+    </ResponseField>
+    <ResponseField name="updated" type="number">
+      UNIX timestamp of last update.
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Flight status (e.g., `scheduled`, `en-route`, `landed`).
+    </ResponseField>
+  </Expandable>
+
+  <Expandable title="Airline & flight identifiers" defaultOpen={false}>
+    <ResponseField name="airline_iata" type="string">
+      Airline IATA code.
+    </ResponseField>
+    <ResponseField name="airline_icao" type="string">
+      Airline ICAO code.
+    </ResponseField>
+    <ResponseField name="flight_number" type="string">
+      Flight number only.
+    </ResponseField>
+    <ResponseField name="flight_iata" type="string">
+      Flight IATA code-number.
+    </ResponseField>
+    <ResponseField name="flight_icao" type="string">
+      Flight ICAO code-number.
+    </ResponseField>
+    <ResponseField name="cs_airline_iata" type="string">
+      Codeshare airline IATA code (when available).
+    </ResponseField>
+    <ResponseField name="cs_flight_number" type="string">
+      Codeshare flight number (when available).
+    </ResponseField>
+    <ResponseField name="cs_flight_iata" type="string">
+      Codeshare flight IATA code-number (when available).
+    </ResponseField>
+  </Expandable>
+
+  <Expandable title="Route" defaultOpen={false}>
+    <ResponseField name="dep_iata" type="string">
+      Departure airport IATA code.
+    </ResponseField>
+    <ResponseField name="dep_icao" type="string">
+      Departure airport ICAO code.
+    </ResponseField>
+    <ResponseField name="arr_iata" type="string">
+      Arrival airport IATA code.
+    </ResponseField>
+    <ResponseField name="arr_icao" type="string">
+      Arrival airport ICAO code.
+    </ResponseField>
+  </Expandable>
+
+  <Expandable title="Airport operations" defaultOpen={false}>
+    <ResponseField name="dep_terminal" type="string">
+      Departure terminal (when available).
+    </ResponseField>
+    <ResponseField name="dep_gate" type="string">
+      Departure gate (when available).
+    </ResponseField>
+    <ResponseField name="arr_terminal" type="string">
+      Arrival terminal (when available).
+    </ResponseField>
+    <ResponseField name="arr_gate" type="string">
+      Arrival gate (when available).
+    </ResponseField>
+    <ResponseField name="arr_baggage" type="string">
+      Arrival baggage belt (when available).
+    </ResponseField>
+  </Expandable>
+
+  <Expandable title="Times & delays" defaultOpen={false}>
+    <ResponseField name="dep_time" type="string">
+      Scheduled departure time (local).
+    </ResponseField>
+    <ResponseField name="dep_time_ts" type="number">
+      Scheduled departure time (unix).
+    </ResponseField>
+    <ResponseField name="dep_time_utc" type="string">
+      Scheduled departure time (UTC).
+    </ResponseField>
+    <ResponseField name="arr_time" type="string">
+      Scheduled arrival time (local).
+    </ResponseField>
+    <ResponseField name="arr_time_ts" type="number">
+      Scheduled arrival time (unix).
+    </ResponseField>
+    <ResponseField name="arr_time_utc" type="string">
+      Scheduled arrival time (UTC).
+    </ResponseField>
+    <ResponseField name="duration" type="number">
+      Estimated flight duration (minutes).
+    </ResponseField>
+    <ResponseField name="delayed" type="number">
+      Estimated total delay (minutes, when available).
+    </ResponseField>
+    <ResponseField name="dep_delayed" type="number">
+      Departure delay (minutes, when available).
+    </ResponseField>
+    <ResponseField name="arr_delayed" type="number">
+      Arrival delay (minutes, when available).
+    </ResponseField>
+  </Expandable>
+
+  <Expandable title="Aircraft details" defaultOpen={false}>
+    <ResponseField name="reg_number" type="string">
+      Aircraft registration number (when available).
+    </ResponseField>
+    <ResponseField name="aircraft_icao" type="string">
+      Aircraft ICAO type designator.
+    </ResponseField>
+    <ResponseField name="model" type="string">
+      Aircraft model (when available).
+    </ResponseField>
+    <ResponseField name="manufacturer" type="string">
+      Aircraft manufacturer (when available).
+    </ResponseField>
+    <ResponseField name="msn" type="string">
+      Manufacturer serial number (when available).
+    </ResponseField>
+    <ResponseField name="engine" type="string">
+      Engine type (when available).
+    </ResponseField>
+    <ResponseField name="engine_count" type="string">
+      Engine count (when available).
+    </ResponseField>
+    <ResponseField name="built" type="number">
+      Build year (when available).
+    </ResponseField>
+    <ResponseField name="age" type="number">
+      Aircraft age (years, when available).
+    </ResponseField>
+    <ResponseField name="type" type="string">
+      Airframe type (when available).
+    </ResponseField>
+    <ResponseField name="flag" type="string">
+      ISO-2 country code (when available).
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseExample>
+```json Response
+{
+  "hex": "AAB812",
+  "reg_number": "N790AN",
+  "aircraft_icao": "B772",
+  "flag": "US",
+  "lat": 33.455017,
+  "lng": -118.738312,
+  "alt": 10668,
+  "dir": 80,
+  "speed": 942,
+  "v_speed": 0,
+  "squawk": "3726",
+  "airline_icao": "AAL",
+  "airline_iata": "AA",
+  "flight_number": "6",
+  "flight_icao": "AAL6",
+  "flight_iata": "AA6",
+  "cs_airline_iata": null,
+  "cs_flight_number": null,
+  "cs_flight_iata": null,
+  "dep_icao": "PHOG",
+  "dep_iata": "OGG",
+  "dep_terminal": null,
+  "dep_gate": "29",
+  "dep_time": "2021-07-21 18:50",
+  "dep_time_ts": 1626929400,
+  "dep_time_utc": "2021-07-22 04:50",
+  "arr_icao": "KDFW",
+  "arr_iata": "DFW",
+  "arr_terminal": "A",
+  "arr_gate": "A24",
+  "arr_baggage": "A28",
+  "arr_time": "2021-07-22 07:04",
+  "arr_time_ts": 1626955440,
+  "arr_time_utc": "2021-07-22 12:04",
+  "duration": 434,
+  "delayed": null,
+  "dep_delayed": null,
+  "arr_delayed": null,
+  "updated": 1626858778,
+  "status": "en-route",
+  "age": 6,
+  "built": 2015,
+  "engine": "jet",
+  "engine_count": "2",
+  "model": "Airbus A321-100/200 Ceo",
+  "manufacturer": "AIRBUS",
+  "msn": "5938",
+  "type": "landplane"
+}
+```
+</ResponseExample>
+
+<Note>
+  If there is no result, you can often find future occurrences using the [Routes Dataset](/api-reference/endpoints/routes).
+</Note>
+
+### See also
+
+- [Real-Time Flights API](/api-reference/endpoints/flights)
+- [Flight Schedules API](/api-reference/endpoints/schedules)
+- [Routes Dataset API](/api-reference/endpoints/routes)
+- [Aircraft Fleets Dataset API](/api-reference/endpoints/fleets)
+
+

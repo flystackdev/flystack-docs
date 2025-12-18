@@ -1,0 +1,114 @@
+---
+title: "Cities Dataset"
+api: "GET https://api.flystack.dev/v1/cities"
+description: "Retrieve cities worldwide using IATA city codes and location metadata."
+---
+
+City data complements airport data. If you need destination functionality that does not depend on a specific airport, you can use cities—or combine both to build richer travel experiences.
+
+Cities are especially useful for maps and clustering (grouping multiple airports under a metro area), and for search in booking, hotel, and GDS-like workflows where an IATA city code represents “all airports in a city”.
+
+### Authentication
+
+<ParamField header="x-api-key" type="string" required={true}>
+  Your FlyStack API token. You can create one from the dashboard (see [Authentication](/authentication)).
+</ParamField>
+
+### Query parameters
+
+<ParamField query="city_code" type="string" required={false}>
+  Filter by IATA city code (e.g., `SIN`).
+</ParamField>
+
+<ParamField query="country_code" type="string" required={false}>
+  Filter by country ISO-2 code (e.g., `SG`).
+</ParamField>
+
+<ParamField query="_fields" type="string" required={false}>
+  Comma-separated list of fields to return (e.g., `name,city_code,lat,lng,country_code`).
+</ParamField>
+
+<Note>
+  The response can be shortened for readability when using `_fields`. Data coverage may vary by city.
+</Note>
+
+### Response
+
+The endpoint returns a list of cities.
+
+#### Cities dataset response fields
+
+<ResponseField type="array">
+  <ResponseField type="object">
+    <ResponseField name="name" type="string">
+      City name.
+    </ResponseField>
+    <ResponseField name="city_code" type="string">
+      Metropolitan area IATA code.
+    </ResponseField>
+    <ResponseField name="un_locode" type="string">
+      United Nations location code (when available).
+    </ResponseField>
+    <ResponseField name="lat" type="number">
+      Latitude.
+    </ResponseField>
+    <ResponseField name="lng" type="number">
+      Longitude.
+    </ResponseField>
+    <ResponseField name="alt" type="number">
+      City elevation (meters, when available).
+    </ResponseField>
+    <ResponseField name="timezone" type="string">
+      IANA timezone (when available).
+    </ResponseField>
+    <ResponseField name="country_code" type="string">
+      ISO-2 country code.
+    </ResponseField>
+    <Expandable title="Enrichment" defaultOpen={false}>
+      <ResponseField name="population" type="number">
+        City population (when available).
+      </ResponseField>
+      <ResponseField name="names" type="object">
+        Alternative names in different languages (when available).
+      </ResponseField>
+      <ResponseField name="wikipedia" type="string">
+        Link to the city page on Wikipedia (when available).
+      </ResponseField>
+    </Expandable>
+    <ResponseField name="slug" type="string">
+      Unique city identifier.
+    </ResponseField>
+  </ResponseField>
+</ResponseField>
+
+<ResponseExample>
+```json Response
+[
+  {
+    "name": "Singapore",
+    "city_code": "SIN",
+    "un_locode": "SGSIN",
+    "lat": 1.28967,
+    "lng": 103.85007,
+    "alt": 22,
+    "timezone": "Asia/Singapore",
+    "country_code": "SG",
+    "population": 3547809,
+    "names": {
+      "en": "Singapore",
+      "fr": "Singapour",
+      "de": "Singapur",
+      "es": "Singapur"
+    },
+    "wikipedia": "https://en.wikipedia.org/wiki/Singapore",
+    "slug": "singapore-sin-sg"
+  }
+]
+```
+</ResponseExample>
+
+### See also
+
+- [Airports Dataset API](/api-reference/endpoints/airports)
+
+

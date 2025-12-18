@@ -1,0 +1,94 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "FlyStack",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "versions": ["v1"],
+  "feedback": {
+    "thumbsRating": true
+  },
+  "modeToggle": {
+    "default": "light",
+    "isHidden": true
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#051039",
+    "light": "#051039",
+    "dark": "#051039",
+    "anchors": {
+      "from": "#117866",
+      "to": "#2AB673"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "mailto:josselin.liebe@piloterr.com"
+    },
+    {
+      "name": "Status",
+      "url": "https://status.flystack.dev"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Dashboard",
+    "url": "https://app.flystack.dev/login"
+  },
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "api-reference",
+      "version": "v1"
+    },
+    {
+      "name": "Datasets",
+      "url": "databases",
+      "version": "v1"
+    },
+    {
+      "name": "Platform",
+      "url": "platform",
+      "version": "v1"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": ["introduction", "authentication", "how-it-works", "status-code"]
+    },
+    {
+      "group": "Real-time",
+      "pages": [
+        "api-reference/endpoints/flights",
+        "api-reference/endpoints/flight",
+        "api-reference/endpoints/delays",
+        "api-reference/endpoints/schedules"
+      ]
+    },
+    {
+      "group": "Datasets",
+      "pages": [
+        "api-reference/endpoints/airports",
+        "api-reference/endpoints/airports/nearby",
+        "api-reference/endpoints/airlines",
+        "api-reference/endpoints/routes",
+        "api-reference/endpoints/cities",
+        "api-reference/endpoints/countries",
+        "api-reference/endpoints/timezones",
+        "api-reference/endpoints/fleets"
+      ]
+    },
+    {
+      "group": "Platform",
+      "pages": ["api-reference/jobs", "api-reference/usage"]
+    }
+  ],
+  "footerSocials": {
+    "github": "https://github.com/flystackdev",
+    "linkedin": "https://www.linkedin.com/company/flystack",
+    "discord": "https://discord.com/invite/CFj3ph8aHU"
+  }
+}

@@ -1,0 +1,30 @@
+---
+title: "Usage"
+api: "GET https://api.flystack.dev/v1/usage"
+description: "Get usage information for your account."
+---
+
+### Authentication
+
+<ParamField header="x-api-key" type="string" required={true}>
+  Your FlyStack API token. You can create one from the dashboard (see [Authentication](/authentication)).
+</ParamField>
+
+### Response
+
+<ResponseField name="plan" type="string">
+    Plan name
+</ResponseField>
+
+<ResponseField name="remaining" type="string">
+    Remaining requests
+</ResponseField>
+
+<ResponseExample>
+```json Response
+{
+    "plan": "API",
+    "remaining": "58485"
+}
+```
+</ResponseExample>

@@ -1,0 +1,50 @@
+---
+title: Asynchronous Jobs
+description: "Guide to using the FlyStack asynchronous jobs, which are used to process requests asynchronously."
+icon: "plane"
+---
+
+## Operating Principle
+
+FlyStack works with an asynchronous job system. Here are the steps to use a job:
+
+1. **Create a Download Job**
+   - Make a request to `GET /api/v1/jobs` with the job parameters
+   - You'll receive a `job_id` in response
+
+2. **Monitor Job Status**
+   - Use the received `job_id` to check progress via `GET /api/v1/jobs/{job_id}`
+   - You can make this request as many times as needed at no additional cost
+   - The status can be:
+     - `QueuedJob`: The job is being processed
+     - `CompletedJob`: The job is complete
+
+3. **Get the Result**
+   - Once the job is complete (`CompletedJob`), you'll have access to the download URL in the response
+   - The job result remains available on our servers for 24 hours
+   - You must download it to your own server to keep it longer
+
+## HTTP Status Codes
+
+- `201 Created`: Job successfully created and queued for processing
+- `200 OK`: Successfully retrieved job status or download information
+- `400 Bad Request`: Invalid input (malformed parameters, unsupported job type)
+- `404 Not Found`: Job ID doesn't exist
+
+## Processing Time
+
+Jobs typically take between 2 and 30 minutes to complete. If processing hasn't finished after 2 hours, the job will automatically timeout.
+
+## Error Handling
+
+If the job fails, it could be due to several reasons:
+- The job parameters are invalid
+- The job result is no longer available
+- The job result has age restrictions
+- A technical error from FlyStack
+
+In all cases, you will receive an explanatory error message. In case of technical errors, please contact our support.
+
+<Note>
+  Job results are automatically deleted from our servers after 24 hours. Make sure to save them before this time if needed.
+</Note> 

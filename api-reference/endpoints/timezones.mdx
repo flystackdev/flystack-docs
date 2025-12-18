@@ -1,0 +1,51 @@
+---
+title: "Timezones"
+api: "GET https://api.flystack.dev/v1/timezones"
+description: "List IANA timezones with country codes and offsets (GMT/DST)."
+---
+
+Use this endpoint when you need to translate time between users’ time zones and airport time zones, or compute durations consistently across locations.
+
+### Authentication
+
+<ParamField header="x-api-key" type="string" required={true}>
+  Your FlyStack API token. You can create one from the dashboard (see [Authentication](/authentication)).
+</ParamField>
+
+### Response
+
+The endpoint returns a list of timezones.
+
+#### Timezones response fields
+
+<ResponseField type="array">
+  <ResponseField type="object">
+    <ResponseField name="timezone" type="string">
+      IANA timezone name (e.g., `Europe/Paris`).
+    </ResponseField>
+    <ResponseField name="country_code" type="string">
+      ISO-2 country code.
+    </ResponseField>
+    <ResponseField name="gmt" type="number">
+      GMT offset (hours).
+    </ResponseField>
+    <ResponseField name="dst" type="number">
+      DST offset (hours).
+    </ResponseField>
+  </ResponseField>
+</ResponseField>
+
+<ResponseExample>
+```json Response
+[
+  {
+    "timezone": "Europe/Paris",
+    "country_code": "FR",
+    "gmt": 1,
+    "dst": 2
+  }
+]
+```
+</ResponseExample>
+
+

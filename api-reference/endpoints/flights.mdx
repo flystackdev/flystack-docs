@@ -1,0 +1,225 @@
+---
+title: "Real-Time Flights"
+api: "GET https://api.flystack.dev/v1/flights"
+description: "Track live flights worldwide with near real-time position, speed, heading, and status."
+---
+
+Integrate real-time flight tracking (live ADS-B style data) into your product: monitor individual flights, power flight status screens, visualize traffic on a map, or analyze airspace density and regularity.
+
+### Authentication
+
+<ParamField header="x-api-key" type="string" required={true}>
+  Your FlyStack API token. You can create one from the dashboard (see [Authentication](/authentication)).
+</ParamField>
+
+### Query parameters
+
+#### Area & performance
+
+<ParamField query="bbox" type="string" required={false}>
+  Bounding box: `south_lat,south_lng,north_lat,north_lng`.
+</ParamField>
+
+<ParamField query="zoom" type="number" required={false}>
+  Map zoom level to reduce the number of returned flights (0–11).
+</ParamField>
+
+#### Aircraft / airline / flight filters
+
+<ParamField query="hex" type="string" required={false}>
+  Filter by ICAO24 hex address.
+</ParamField>
+
+<ParamField query="reg_number" type="string" required={false}>
+  Filter by aircraft registration number.
+</ParamField>
+
+<ParamField query="airline_icao" type="string" required={false}>
+  Filter by airline ICAO code.
+</ParamField>
+
+<ParamField query="airline_iata" type="string" required={false}>
+  Filter by airline IATA code.
+</ParamField>
+
+<ParamField query="flag" type="string" required={false}>
+  Filter by airline country ISO-2 code.
+</ParamField>
+
+<ParamField query="flight_icao" type="string" required={false}>
+  Filter by flight ICAO code-number.
+</ParamField>
+
+<ParamField query="flight_iata" type="string" required={false}>
+  Filter by flight IATA code-number.
+</ParamField>
+
+<ParamField query="flight_number" type="string" required={false}>
+  Filter by flight number only.
+</ParamField>
+
+<ParamField query="dep_icao" type="string" required={false}>
+  Filter by departure airport ICAO code.
+</ParamField>
+
+<ParamField query="dep_iata" type="string" required={false}>
+  Filter by departure airport IATA code.
+</ParamField>
+
+<ParamField query="arr_icao" type="string" required={false}>
+  Filter by arrival airport ICAO code.
+</ParamField>
+
+<ParamField query="arr_iata" type="string" required={false}>
+  Filter by arrival airport IATA code.
+</ParamField>
+
+#### Response shaping
+
+<ParamField query="_fields" type="string" required={false}>
+  Comma-separated list of fields to return (e.g., `hex,airline_iata,lat,lng`).
+</ParamField>
+
+<ParamField query="_view" type="string" required={false} default="object">
+  View format:
+  - `object`: default JSON objects
+  - `array`: array rows (useful for browsers / fast rendering)
+</ParamField>
+
+<Note>
+  For `_view=array`, make sure `_fields` lists fields in the exact order you want in the returned arrays.
+</Note>
+
+### Response (object view)
+
+#### Flight response fields
+
+<ResponseField type="array">
+  <ResponseField type="object">
+    <Expandable title="Live tracking" defaultOpen={false}>
+      <ResponseField name="hex" type="string">
+        ICAO24 hex address.
+      </ResponseField>
+      <ResponseField name="lat" type="number">
+        Latitude.
+      </ResponseField>
+      <ResponseField name="lng" type="number">
+        Longitude.
+      </ResponseField>
+      <ResponseField name="alt" type="number">
+        Altitude (meters).
+      </ResponseField>
+      <ResponseField name="dir" type="number">
+        Heading (degrees).
+      </ResponseField>
+      <ResponseField name="speed" type="number">
+        Horizontal speed (km/h).
+      </ResponseField>
+      <ResponseField name="v_speed" type="number">
+        Vertical speed.
+      </ResponseField>
+      <ResponseField name="squawk" type="string">
+        Squawk code (when available).
+      </ResponseField>
+      <ResponseField name="updated" type="number">
+        UNIX timestamp of last update.
+      </ResponseField>
+      <ResponseField name="status" type="string">
+        Flight status (`scheduled`, `en-route`, `landed`).
+      </ResponseField>
+    </Expandable>
+
+    <Expandable title="Flight & airline identifiers" defaultOpen={false}>
+      <ResponseField name="flight_number" type="string">
+        Flight number only.
+      </ResponseField>
+      <ResponseField name="flight_icao" type="string">
+        Flight ICAO code-number.
+      </ResponseField>
+      <ResponseField name="flight_iata" type="string">
+        Flight IATA code-number.
+      </ResponseField>
+      <ResponseField name="airline_icao" type="string">
+        Airline ICAO code.
+      </ResponseField>
+      <ResponseField name="airline_iata" type="string">
+        Airline IATA code.
+      </ResponseField>
+    </Expandable>
+
+    <Expandable title="Route" defaultOpen={false}>
+      <ResponseField name="dep_icao" type="string">
+        Departure airport ICAO code.
+      </ResponseField>
+      <ResponseField name="dep_iata" type="string">
+        Departure airport IATA code.
+      </ResponseField>
+      <ResponseField name="arr_icao" type="string">
+        Arrival airport ICAO code.
+      </ResponseField>
+      <ResponseField name="arr_iata" type="string">
+        Arrival airport IATA code.
+      </ResponseField>
+    </Expandable>
+
+    <Expandable title="Aircraft" defaultOpen={false}>
+      <ResponseField name="reg_number" type="string">
+        Aircraft registration number (when available).
+      </ResponseField>
+      <ResponseField name="flag" type="string">
+        ISO-2 country code (when available).
+      </ResponseField>
+      <ResponseField name="aircraft_icao" type="string">
+        Aircraft ICAO type designator.
+      </ResponseField>
+    </Expandable>
+  </ResponseField>
+</ResponseField>
+
+<ResponseExample>
+```json Response
+[
+  {
+    "hex": "780695",
+    "reg_number": "B-5545",
+    "flag": "CN",
+    "lat": 28.397377,
+    "lng": 115.1008,
+    "alt": 7078,
+    "dir": 269,
+    "speed": 775,
+    "v_speed": -7.8,
+    "squawk": "0205",
+    "flight_number": "9429",
+    "flight_icao": "CSH9429",
+    "flight_iata": "FM9429",
+    "dep_icao": "ZSPD",
+    "dep_iata": "PVG",
+    "arr_icao": "ZGHY",
+    "arr_iata": "HNY",
+    "airline_icao": "CSH",
+    "airline_iata": "FM",
+    "aircraft_icao": "B738",
+    "updated": 1626153069,
+    "status": "en-route"
+  }
+]
+```
+</ResponseExample>
+
+### Response (array view)
+
+<ResponseExample>
+```json Response
+[
+  ["140668", "NP", 55.879863, 37.159452, 310.1, 320],
+  ["300164", "IT", 42.040581, 12.156564, 131, 1219]
+]
+```
+</ResponseExample>
+
+### See also
+
+- [Airlines Dataset API](/api-reference/endpoints/airlines)
+
+

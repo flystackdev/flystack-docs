@@ -1,0 +1,46 @@
+---
+title: "Nearby"
+api: "GET https://api.flystack.dev/v1/airports/nearby"
+description: "Find nearby airports around a location (lat/lng), optionally filtered by radius and result limit."
+---
+
+This endpoint helps you build “near me” experiences: nearest airports to a user, airport suggestions around a point on a map, or picking the best departure/arrival options within a radius.
+
+### Authentication
+
+<ParamField header="x-api-key" type="string" required={true}>
+  Your FlyStack API token. You can create one from the dashboard (see [Authentication](/authentication)).
+</ParamField>
+
+### Query parameters
+
+<ParamField query="lat" type="number" required={true}>
+  Latitude (e.g., `48.8566`).
+</ParamField>
+
+<ParamField query="lng" type="number" required={true}>
+  Longitude (e.g., `2.3522`).
+</ParamField>
+
+<ParamField query="radius" type="number" required={false}>
+  Search radius around the point (in kilometers).
+</ParamField>
+
+<ParamField query="limit" type="number" required={false}>
+  Max number of results to return.
+</ParamField>
+
+<Note>
+  For airport metadata fields, the returned objects follow the Airports Dataset shape.
+</Note>
+
+### Response
+
+The endpoint returns a list of nearby airports (sorted by distance).
+
+### See also
+
+- [Airports Dataset API](/api-reference/endpoints/airports)
+- [Airports Nearby API](/api-reference/endpoints/airports-nearby)
+
+

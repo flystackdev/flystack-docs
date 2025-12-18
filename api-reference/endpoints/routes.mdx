@@ -1,0 +1,202 @@
+---
+title: "Airline Routes"
+api: "GET https://api.flystack.dev/v1/routes"
+description: "Explore airline routes and planned schedules (non real-time) to build connections and future itineraries."
+---
+
+The Routes dataset contains planned airline schedules that are operated by airlines. This is **not** real-time data and does not include live flight status.
+
+Together with the [Flight Schedules API](/api-reference/endpoints/schedules), routes data can help you predict schedules further into the future and build connection logic (days of week, departure times, aircraft type, terminals, etc.).
+
+### Authentication
+
+<ParamField header="x-api-key" type="string" required={true}>
+  Your FlyStack API token. You can create one from the dashboard (see [Authentication](/authentication)).
+</ParamField>
+
+### Query parameters
+
+#### Route filters
+
+<ParamField query="dep_iata" type="string" required={false}>
+  Filter by departure airport IATA code (e.g., `CMB`).
+</ParamField>
+
+<ParamField query="dep_icao" type="string" required={false}>
+  Filter by departure airport ICAO code (e.g., `VCBI`).
+</ParamField>
+
+<ParamField query="arr_iata" type="string" required={false}>
+  Filter by arrival airport IATA code (e.g., `AUH`).
+</ParamField>
+
+<ParamField query="arr_icao" type="string" required={false}>
+  Filter by arrival airport ICAO code (e.g., `OMAA`).
+</ParamField>
+
+<ParamField query="airline_iata" type="string" required={false}>
+  Filter by airline IATA code (e.g., `UL`).
+</ParamField>
+
+<ParamField query="airline_icao" type="string" required={false}>
+  Filter by airline ICAO code (e.g., `ALK`).
+</ParamField>
+
+<ParamField query="flight_icao" type="string" required={false}>
+  Filter by flight ICAO code-number (e.g., `ALK2265`).
+</ParamField>
+
+<ParamField query="flight_iata" type="string" required={false}>
+  Filter by flight IATA code-number (e.g., `UL2265`).
+</ParamField>
+
+<ParamField query="flight_number" type="string" required={false}>
+  Filter by flight number only (e.g., `2265`).
+</ParamField>
+
+#### Response shaping & pagination
+
+<ParamField query="_fields" type="string" required={false}>
+  Comma-separated list of fields to return (e.g., `airline_iata,flight_number`).
+</ParamField>
+
+<ParamField query="limit" type="number" required={false}>
+  Max number of results per response (limits may depend on your plan).
+</ParamField>
+
+<ParamField query="offset" type="number" required={false}>
+  Pagination offset (0+). Use with `limit` when a response indicates there are more results.
+</ParamField>
+
+<Note>
+  For best results, provide at least one filter (airport, airline, or flight code).
+</Note>
+
+### Response
+
+The endpoint returns a list of routes.
+
+#### Routes dataset response fields
+
+<ResponseField type="array">
+  <ResponseField type="object">
+    <Expandable title="Airline & flight identifiers" defaultOpen={false}>
+      <ResponseField name="airline_iata" type="string">
+        Airline IATA code.
+      </ResponseField>
+      <ResponseField name="airline_icao" type="string">
+        Airline ICAO code.
+      </ResponseField>
+      <ResponseField name="flight_number" type="string">
+        Flight number only.
+      </ResponseField>
+      <ResponseField name="flight_iata" type="string">
+        Flight IATA code-number.
+      </ResponseField>
+      <ResponseField name="flight_icao" type="string">
+        Flight ICAO code-number.
+      </ResponseField>
+      <ResponseField name="cs_airline_iata" type="string">
+        Codeshare airline IATA code (when available).
+      </ResponseField>
+      <ResponseField name="cs_flight_number" type="string">
+        Codeshare flight number (when available).
+      </ResponseField>
+      <ResponseField name="cs_flight_iata" type="string">
+        Codeshare flight IATA code-number (when available).
+      </ResponseField>
+    </Expandable>
+
+    <Expandable title="Departure" defaultOpen={false}>
+      <ResponseField name="dep_iata" type="string">
+        Departure airport IATA code.
+      </ResponseField>
+      <ResponseField name="dep_icao" type="string">
+        Departure airport ICAO code.
+      </ResponseField>
+      <ResponseField name="dep_time" type="string">
+        Departure time (local).
+      </ResponseField>
+      <ResponseField name="dep_time_utc" type="string">
+        Departure time (UTC).
+      </ResponseField>
+      <ResponseField name="dep_terminals" type="array">
+        List of possible departure terminals (when available).
+      </ResponseField>
+    </Expandable>
+
+    <Expandable title="Arrival" defaultOpen={false}>
+      <ResponseField name="arr_iata" type="string">
+        Arrival airport IATA code.
+      </ResponseField>
+      <ResponseField name="arr_icao" type="string">
+        Arrival airport ICAO code.
+      </ResponseField>
+      <ResponseField name="arr_time" type="string">
+        Arrival time (local).
+      </ResponseField>
+      <ResponseField name="arr_time_utc" type="string">
+        Arrival time (UTC).
+      </ResponseField>
+      <ResponseField name="arr_terminals" type="array">
+        List of possible arrival terminals (when available).
+      </ResponseField>
+    </Expandable>
+
+    <Expandable title="Operations" defaultOpen={false}>
+      <ResponseField name="duration" type="number">
+        Estimated flight duration (minutes).
+      </ResponseField>
+      <ResponseField name="days" type="array">
+        Days of operation (`sun`, `mon`, `tue`, `wed`, `thu`, `fri`, `sat`).
+      </ResponseField>
+      <ResponseField name="aircraft_icao" type="string">
+        Last used aircraft ICAO type on this route (when available).
+      </ResponseField>
+      <ResponseField name="updated" type="string">
+        Last update timestamp (when available).
+      </ResponseField>
+    </Expandable>
+  </ResponseField>
+</ResponseField>
+
+<ResponseExample>
+```json Response
+[
+  {
+    "airline_iata": "UL",
+    "airline_icao": "ALK",
+    "flight_number": "2265",
+    "flight_iata": "UL2265",
+    "flight_icao": "ALK2265",
+    "cs_airline_iata": "EY",
+    "cs_flight_iata": "EY265",
+    "cs_flight_number": "265",
+    "dep_iata": "CMB",
+    "dep_icao": "VCBI",
+    "dep_time": "02:50",
+    "dep_time_utc": "21:20",
+    "dep_terminals": ["1"],
+    "arr_iata": "AUH",
+    "arr_icao": "OMAA",
+    "arr_time": "05:50",
+    "arr_time_utc": "01:50",
+    "arr_terminals": ["1", "T3"],
+    "duration": 270,
+    "days": ["mon", "wed", "sat"],
+    "aircraft_icao": "A320",
+    "updated": "2023-02-11T22:51:55.000Z"
+  }
+]
+```
+</ResponseExample>
+
+### See also
+
+- [Aircraft Fleets Dataset API](/api-reference/endpoints/fleets)
+- [Real-Time Flights API](/api-reference/endpoints/flights)
+- [Flight Schedules API](/api-reference/endpoints/schedules)
+- [Airports Dataset API](/api-reference/endpoints/airports)
+- [Airlines Dataset API](/api-reference/endpoints/airlines)
+
+

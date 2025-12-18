@@ -1,0 +1,200 @@
+---
+title: "Aircraft Fleets Dataset"
+api: "GET https://api.flystack.dev/v1/fleets"
+description: "Explore airline fleets and aircraft metadata worldwide, with optional latest known position fields."
+---
+
+Augment your product with aircraft fleet data: display aircraft model/type, estimate fleet age, enrich flight tracking experiences, and improve the overall quality of information in your UI.
+
+### Authentication
+
+<ParamField header="x-api-key" type="string" required={true}>
+  Your FlyStack API token. You can create one from the dashboard (see [Authentication](/authentication)).
+</ParamField>
+
+### Query parameters
+
+#### Pagination
+
+<ParamField query="limit" type="number" required={false}>
+  Max number of rows per response (limits may depend on your plan).
+</ParamField>
+
+<ParamField query="offset" type="number" required={false}>
+  Pagination offset (0+). Use with `limit` when a response indicates there are more results.
+</ParamField>
+
+#### Filters
+
+<ParamField query="airline_iata" type="string" required={false}>
+  Filter by airline IATA code (e.g., `AA`).
+</ParamField>
+
+<ParamField query="airline_icao" type="string" required={false}>
+  Filter by airline ICAO code (e.g., `AAL`).
+</ParamField>
+
+<ParamField query="hex" type="string" required={false}>
+  Filter by ICAO24 hex address.
+</ParamField>
+
+<ParamField query="reg_number" type="string" required={false}>
+  Filter by aircraft registration number.
+</ParamField>
+
+<ParamField query="msn" type="string" required={false}>
+  Filter by manufacturer serial number (MSN).
+</ParamField>
+
+<ParamField query="flag" type="string" required={false}>
+  Filter by country ISO-2 code.
+</ParamField>
+
+#### Response shaping
+
+<ParamField query="_fields" type="string" required={false}>
+  Comma-separated list of fields to return (e.g., `hex,airline_iata,manufacturer`).
+</ParamField>
+
+<Note>
+  Latest GEO fields (lat/lng/alt/dir/speed/v_speed/squawk/last_seen) are typically available when querying by `msn`, `hex`, or `reg_number` (coverage may vary).
+</Note>
+
+### Response
+
+The endpoint returns a list of aircraft.
+
+#### Aircraft fleet response fields
+
+<ResponseField type="array">
+  <ResponseField type="object">
+    <Expandable title="Identifiers" defaultOpen={false}>
+      <ResponseField name="hex" type="string">
+        ICAO24 hex address.
+      </ResponseField>
+      <ResponseField name="reg_number" type="string">
+        Aircraft registration number (when available).
+      </ResponseField>
+      <ResponseField name="flag" type="string">
+        ISO-2 country code (when available).
+      </ResponseField>
+      <ResponseField name="airline_icao" type="string">
+        Airline ICAO code (when available).
+      </ResponseField>
+      <ResponseField name="airline_iata" type="string">
+        Airline IATA code (when available).
+      </ResponseField>
+    </Expandable>
+
+    <Expandable title="Aircraft type" defaultOpen={false}>
+      <ResponseField name="icao" type="string">
+        Aircraft ICAO type designator (e.g., `B77W`).
+      </ResponseField>
+      <ResponseField name="iata" type="string">
+        Aircraft IATA type designator (e.g., `77W`).
+      </ResponseField>
+      <ResponseField name="model" type="string">
+        Full aircraft model name (when available).
+      </ResponseField>
+      <ResponseField name="manufacturer" type="string">
+        Aircraft manufacturer (when available).
+      </ResponseField>
+      <ResponseField name="msn" type="string">
+        Manufacturer serial number (when available).
+      </ResponseField>
+      <ResponseField name="line" type="string">
+        Manufacturer line number (when available).
+      </ResponseField>
+      <ResponseField name="type" type="string">
+        Aircraft type (e.g., `landplane`, `helicopter`, `amphibian`, ...).
+      </ResponseField>
+      <ResponseField name="category" type="string">
+        Wake turbulence category (e.g., `J`, `H`, `M`, `L`).
+      </ResponseField>
+    </Expandable>
+
+    <Expandable title="Engines & age" defaultOpen={false}>
+      <ResponseField name="engine" type="string">
+        Engine type (e.g., `jet`, `piston`, `electric`, ...).
+      </ResponseField>
+      <ResponseField name="engine_count" type="string">
+        Number of engines (when available).
+      </ResponseField>
+      <ResponseField name="built" type="number">
+        Built year (when available).
+      </ResponseField>
+      <ResponseField name="age" type="number">
+        Aircraft age (years, when available).
+      </ResponseField>
+    </Expandable>
+
+    <Expandable title="Latest known position (optional)" defaultOpen={false}>
+      <ResponseField name="lat" type="number">
+        Latitude (when available).
+      </ResponseField>
+      <ResponseField name="lng" type="number">
+        Longitude (when available).
+      </ResponseField>
+      <ResponseField name="alt" type="number">
+        Altitude (when available).
+      </ResponseField>
+      <ResponseField name="dir" type="number">
+        Heading (when available).
+      </ResponseField>
+      <ResponseField name="speed" type="number">
+        Speed (km/h, when available).
+      </ResponseField>
+      <ResponseField name="v_speed" type="number">
+        Vertical speed (when available).
+      </ResponseField>
+      <ResponseField name="squawk" type="string">
+        Squawk code (when available).
+      </ResponseField>
+      <ResponseField name="last_seen" type="number">
+        Latest signal time (when available).
+      </ResponseField>
+    </Expandable>
+  </ResponseField>
+</ResponseField>
+
+<ResponseExample>
+```json Response
+[
+  {
+    "hex": "A9D286",
+    "reg_number": "N732AN",
+    "flag": "US",
+    "airline_icao": "AAL",
+    "airline_iata": "AA",
+    "last_seen": 172540,
+    "icao": "B77W",
+    "iata": "77W",
+    "model": "Boeing 777-300ER pax",
+    "engine": "jet",
+    "engine_count": "2",
+    "manufacturer": "BOEING",
+    "type": "landplane",
+    "category": "H",
+    "built": 2015,
+    "age": 6,
+    "msn": "31549",
+    "line": "1257",
+    "lat": 25.263,
+    "lng": 51.612,
+    "alt": 0,
+    "dir": 67,
+    "speed": 1,
+    "v_speed": 0,
+    "squawk": "0000"
+  }
+]
+```
+</ResponseExample>
+
+### See also
+
+- [Real-Time Flights API](/api-reference/endpoints/flights)
+- [Airlines Dataset API](/api-reference/endpoints/airlines)
+- [Airports Dataset API](/api-reference/endpoints/airports)
+
+

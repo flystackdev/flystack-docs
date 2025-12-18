@@ -72,7 +72,7 @@
       "group": "Datasets",
       "pages": [
         "api-reference/endpoints/airports",
-        "api-reference/endpoints/airports/nearby",
+        "api-reference/endpoints/airports-nearby",
         "api-reference/endpoints/airlines",
         "api-reference/endpoints/routes",
         "api-reference/endpoints/cities",
